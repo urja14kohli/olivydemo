@@ -56,7 +56,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
   const anyStarted = CONNECTORS.some((c) => states[c.id] !== 'idle')
 
   return (
-    <div className="flex h-full flex-col items-center justify-center px-6 py-10">
+    <div className="flex min-h-full flex-col items-center justify-center px-6 py-10">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

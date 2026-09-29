@@ -47,7 +47,7 @@ export default function Scanning({ site, onDone }: { site: string; onDone: () =>
   const progress = Math.min(1, typedChars / totalChars)
 
   return (
-    <div className="flex h-full flex-col items-center justify-center px-6">
+    <div className="flex min-h-full flex-col items-center justify-center px-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

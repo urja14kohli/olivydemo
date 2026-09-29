@@ -13,6 +13,8 @@ import puppeteer from 'puppeteer-core'
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const OUT = '/tmp/olivy-shots'
 const [name = 'shot', waitArg = '6', actionsArg = '', urlPath = '/'] = process.argv.slice(2)
+const width = Number(process.env.W || 1440)
+const height = Number(process.env.H || 900)
 
 mkdirSync(OUT, { recursive: true })
 
@@ -20,7 +22,7 @@ const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: 'new',
   args: ['--force-device-scale-factor=2', '--hide-scrollbars', '--font-render-hinting=none'],
-  defaultViewport: { width: 1440, height: 900, deviceScaleFactor: 2 },
+  defaultViewport: { width, height, deviceScaleFactor: 2 },
 })
 
 const page = await browser.newPage()

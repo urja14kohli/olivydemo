@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, X } from 'lucide-react'
 import type { Agent, DetailItem } from '../lib/agents'
@@ -13,6 +13,12 @@ export default function AgentDetailPanel({
   agent: Agent | null
   onClose: () => void
 }) {
+  const [approved, setApproved] = useState(false)
+
+  useEffect(() => {
+    setApproved(false)
+  }, [agent?.id])
+
   useEffect(() => {
     if (!agent) return
     const onKey = (e: KeyboardEvent) => {
@@ -105,23 +111,42 @@ export default function AgentDetailPanel({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.24 + i * 0.05, duration: 0.4, ease: EASE }}
                   >
-                    <ItemRow item={item} accent={agent.accent} />
+                    <ItemRow
+                      item={approved ? { ...item, state: 'done' } : item}
+                      accent={agent.accent}
+                    />
                   </motion.li>
                 ))}
               </ul>
             </div>
 
             <footer className="relative flex gap-2.5 border-t border-white/70 bg-white/40 px-6 py-4">
-              <button
+              <motion.button
                 type="button"
-                className="flex-1 rounded-full px-4 py-2.5 text-[13px] font-semibold text-white transition-transform active:scale-[0.98]"
+                onClick={() => setApproved(true)}
+                className="flex-1 rounded-full px-4 py-2.5 text-[13px] font-semibold text-white"
                 style={{
-                  background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
+                  background: approved
+                    ? 'linear-gradient(135deg, #34C98A, #1FA873)'
+                    : 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
                   boxShadow: '0 8px 20px -8px rgba(107,63,160,0.7)',
                 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {standby ? 'Turn this on' : 'Approve all'}
-              </button>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={approved ? 'done' : 'idle'}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center justify-center gap-1.5"
+                  >
+                    {approved && <Check className="size-[13px]" strokeWidth={3.2} />}
+                    {approved ? 'Approved' : standby ? 'Turn this on' : 'Approve all'}
+                  </motion.span>
+                </AnimatePresence>
+              </motion.button>
               <button
                 type="button"
                 className="rounded-full border border-orchid-200 bg-white/70 px-4 py-2.5 text-[13px] font-semibold text-ink-soft transition-colors hover:text-ink"

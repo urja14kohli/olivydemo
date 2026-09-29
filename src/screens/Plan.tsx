@@ -30,7 +30,7 @@ export default function Plan({ onRun }: { onRun: () => void }) {
   const done = flipped >= CHANNELS.length
 
   return (
-    <div className="flex h-full flex-col items-center justify-center px-6 py-6">
+    <div className="flex min-h-full flex-col items-center justify-center px-6 py-6">
       <motion.div
         className="flex flex-col items-center"
         initial={{ opacity: 0 }}
@@ -66,7 +66,11 @@ export default function Plan({ onRun }: { onRun: () => void }) {
                 : {}
             }
           >
-            <ChannelRow channel={channel} phase={i < flipped ? 'after' : 'before'} />
+            <ChannelRow
+              channel={channel}
+              phase={i < flipped ? 'after' : 'before'}
+              dense={showWeek}
+            />
           </motion.li>
         ))}
       </motion.ul>

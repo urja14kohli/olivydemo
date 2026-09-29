@@ -8,7 +8,7 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 export default function Mirror({ site, onNext }: { site: string; onNext: () => void }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center px-6 py-10">
+    <div className="flex min-h-full flex-col items-center justify-center px-6 py-10">
       <motion.div
         className="flex flex-col items-center"
         initial={{ opacity: 0, y: 12 }}

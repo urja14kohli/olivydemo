@@ -11,13 +11,43 @@ const EASE = [0.22, 1, 0.36, 1] as const
 export default function ChannelRow({
   channel,
   phase,
+  dense = false,
 }: {
   channel: Channel
   phase: 'before' | 'after'
+  /** Once the week is on screen the rows step back and give up height. */
+  dense?: boolean
 }) {
   const state = phase === 'before' ? channel.before : channel.after
   const tone = TONES[state.tone]
   const Icon = channel.icon
+
+  if (dense) {
+    return (
+      <motion.div
+        layout
+        className="surface flex items-center gap-3 rounded-[14px] px-3.5 py-2"
+      >
+        <span
+          className="grid size-7 shrink-0 place-items-center rounded-[9px]"
+          style={{ background: `${channel.accent}1F` }}
+        >
+          <Icon className="size-[13px]" style={{ color: channel.accent }} strokeWidth={2.2} />
+        </span>
+        <span className="shrink-0 text-[13px] font-bold tracking-[-0.01em] text-ink">
+          {channel.name}
+        </span>
+        <span className="min-w-0 flex-1 truncate text-[12.5px] text-ink-soft">{state.detail}</span>
+        <span
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11.5px] font-semibold"
+          style={{ background: tone.bg, color: tone.text }}
+        >
+          <span className="size-[5px] rounded-full" style={{ background: tone.dot }} />
+          {state.chip}
+        </span>
+      </motion.div>
+    )
+  }
 
   return (
     <div className="surface flex items-center gap-4 rounded-[16px] px-4 py-3">

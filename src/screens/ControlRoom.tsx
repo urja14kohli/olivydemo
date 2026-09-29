@@ -1,11 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp, Globe } from 'lucide-react'
 import AgentCard, { CARD_HEIGHT, CARD_WIDTH, cardHeight } from '../components/AgentCard'
 import AgentDetailPanel from '../components/AgentDetailPanel'
 import ActivityFeed from '../components/ActivityFeed'
 import ConnectionLine from '../components/ConnectionLine'
+import NotificationBanner from '../components/NotificationBanner'
 import OlivyOrb from '../components/OlivyOrb'
+import ChatView from './ChatView'
 import { AGENTS } from '../lib/agents'
 import type { Agent, AgentId } from '../lib/agents'
 import { useDelayedFlag, useElementSize } from '../lib/hooks'
@@ -66,11 +68,28 @@ function place(agents: Agent[], width: number, height: number): Layout {
   return { origin: { x: cx, y: cy }, placements }
 }
 
-export default function ControlRoom({ onOpenChat }: { onOpenChat?: () => void }) {
+export default function ControlRoom() {
   const [stageRef, stage] = useElementSize<HTMLDivElement>()
   const [openId, setOpenId] = useState<AgentId | null>(null)
   const [hoverId, setHoverId] = useState<AgentId | null>(null)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [notice, setNotice] = useState(false)
   const orbReady = useDelayedFlag(0.1)
+  const onOpenChat = () => setChatOpen(true)
+
+  // Olivy speaks up once the room has settled. Press N to replay it.
+  const noticeDue = useDelayedFlag(14)
+  useEffect(() => {
+    if (noticeDue) setNotice(true)
+  }, [noticeDue])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'n') setNotice((v) => !v)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const layout = useMemo(
     () =>
@@ -86,7 +105,7 @@ export default function ControlRoom({ onOpenChat }: { onOpenChat?: () => void })
 
   return (
     <div className="flex h-full flex-col">
-      <Header runningCount={runningCount} />
+      <Header runningCount={runningCount} onReview={onOpenChat} />
 
       <div ref={stageRef} className="relative min-h-0 flex-1">
         {stage.width > 0 && (
@@ -186,11 +205,19 @@ export default function ControlRoom({ onOpenChat }: { onOpenChat?: () => void })
       </div>
 
       <AgentDetailPanel agent={openAgent} onClose={() => setOpenId(null)} />
+      <ChatView open={chatOpen} onClose={() => setChatOpen(false)} />
+      <NotificationBanner open={notice && !chatOpen} onDismiss={() => setNotice(false)} />
     </div>
   )
 }
 
-function Header({ runningCount }: { runningCount: number }) {
+function Header({
+  runningCount,
+  onReview,
+}: {
+  runningCount: number
+  onReview: () => void
+}) {
   return (
     <motion.header
       className="flex items-center justify-between px-6 py-5"
@@ -221,6 +248,7 @@ function Header({ runningCount }: { runningCount: number }) {
         </span>
         <button
           type="button"
+          onClick={onReview}
           className="rounded-full px-4 py-2 text-[12.5px] font-semibold text-white transition-transform active:scale-[0.98]"
           style={{
             background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',

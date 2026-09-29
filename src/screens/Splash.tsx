@@ -13,7 +13,7 @@ export default function Splash({ onStart }: { onStart: (url: string) => void }) 
   const url = value.trim() || SITE
 
   return (
-    <div className="flex h-full flex-col items-center justify-center px-6">
+    <div className="flex min-h-full flex-col items-center justify-center px-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.86 }}
         animate={{ opacity: 1, scale: 1 }}
