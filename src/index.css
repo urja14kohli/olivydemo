@@ -1,5 +1,32 @@
 @import 'tailwindcss';
 
+@theme {
+  --font-sans:
+    'Satoshi', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-ink: #1a1a2e;
+  --color-ink-soft: #6b6b80;
+  --color-ink-faint: #9b9baf;
+
+  --color-orchid-50: #f8f6fc;
+  --color-orchid-100: #efe9f7;
+  --color-orchid-200: #e0d5f0;
+  --color-orchid-300: #c8b6e4;
+  --color-orchid-400: #a78bfa;
+  --color-orchid-500: #8b7ec8;
+  --color-orchid-600: #6b3fa0;
+  --color-orchid-700: #54307d;
+
+  --color-azure: #60a5fa;
+  --color-lilac: #c084fc;
+  --color-live: #34c98a;
+  --color-attention: #f0a830;
+
+  --radius-card: 20px;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 html,
 body,
 #root {
@@ -8,12 +35,121 @@ body,
 
 body {
   margin: 0;
-  background: #07070b;
-  color: #f4f4f5;
-  font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    sans-serif;
+  background: #f4f0fa;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv01';
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+/* Display type: tight, confident, never shouty. */
+.display {
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Frosted surface used across every card in the product. */
+.surface {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 1px 1px rgba(26, 26, 46, 0.03),
+    0 12px 28px -12px rgba(84, 48, 125, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.surface-raised {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(32px) saturate(170%);
+  -webkit-backdrop-filter: blur(32px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 2px 4px rgba(26, 26, 46, 0.03),
+    0 24px 60px -20px rgba(84, 48, 125, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Scrollbars stay out of the way. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 63, 160, 0.22) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(107, 63, 160, 0.22);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::selection {
+  background: rgba(167, 139, 250, 0.32);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: var(--color-ink-faint);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(107, 63, 160, 0.55);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Edge fade for scrolling lists so content dissolves instead of clipping. */
+.mask-fade-y {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 62%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
