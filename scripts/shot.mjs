@@ -29,12 +29,13 @@ await new Promise((r) => setTimeout(r, Number(waitArg) * 1000))
 
 for (const raw of actionsArg.split('|').filter(Boolean)) {
   const idx = raw.lastIndexOf('::')
-  const selector = idx === -1 ? raw : raw.slice(0, idx)
+  const target = idx === -1 ? raw : raw.slice(0, idx)
   const pause = idx === -1 ? 1 : Number(raw.slice(idx + 2))
   try {
-    await page.click(selector)
+    if (target.startsWith('key:')) await page.keyboard.press(target.slice(4))
+    else await page.click(target)
   } catch (err) {
-    console.error(`click failed: ${selector} (${err.message})`)
+    console.error(`action failed: ${target} (${err.message})`)
   }
   await new Promise((r) => setTimeout(r, pause * 1000))
 }
