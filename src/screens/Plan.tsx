@@ -8,18 +8,12 @@ import { CHANNELS } from '../lib/plan'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/**
- * Opens on the same rows the previous screen ended on, flips them one by one
- * into the state Olivy is proposing, then reveals the week underneath.
- */
 export default function Plan({ onRun }: { onRun: () => void }) {
   const [flipped, setFlipped] = useState(0)
   const [showWeek, setShowWeek] = useState(false)
 
   useEffect(() => {
-    const timers = CHANNELS.map((_, i) =>
-      setTimeout(() => setFlipped(i + 1), 420 + i * 130),
-    )
+    const timers = CHANNELS.map((_, i) => setTimeout(() => setFlipped(i + 1), 420 + i * 130))
     const week = setTimeout(() => setShowWeek(true), 420 + CHANNELS.length * 130 + 180)
     return () => {
       timers.forEach(clearTimeout)
@@ -48,7 +42,7 @@ export default function Plan({ onRun }: { onRun: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
             transition={{ duration: 0.45, ease: EASE }}
-            className="display absolute inset-x-0 text-center text-[34px] text-ink"
+            className="display absolute inset-x-0 text-center text-[32px] text-fg"
           >
             {done ? 'Here is your marketing plan' : 'Here is what Olivy would change'}
           </motion.h1>
@@ -62,7 +56,7 @@ export default function Plan({ onRun }: { onRun: () => void }) {
             key={channel.id}
             animate={
               i < flipped
-                ? { scale: [1, 1.018, 1], transition: { duration: 0.45, ease: EASE } }
+                ? { scale: [1, 1.012, 1], transition: { duration: 0.45, ease: EASE } }
                 : {}
             }
           >
@@ -86,12 +80,10 @@ export default function Plan({ onRun }: { onRun: () => void }) {
             className="w-full max-w-[1000px] pt-7"
           >
             <div className="mb-2.5 flex items-baseline justify-between px-1">
-              <h2 className="text-[13px] font-bold tracking-[-0.01em] text-ink">
+              <h2 className="text-[13px] font-semibold tracking-[-0.015em] text-fg">
                 Week of 29 September
               </h2>
-              <p className="text-[12px] text-ink-faint">
-                Nothing goes out without your approval
-              </p>
+              <p className="text-[12px] text-fg-4">Nothing goes out without your approval</p>
             </div>
             <CalendarView delay={0.1} />
           </motion.div>
@@ -103,24 +95,19 @@ export default function Plan({ onRun }: { onRun: () => void }) {
           <motion.button
             type="button"
             onClick={onRun}
-            className="relative mt-7 inline-flex items-center gap-2.5 overflow-hidden rounded-full px-7 py-3.5 text-[15px] font-semibold text-white"
-            style={{
-              background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-              boxShadow: '0 16px 40px -14px rgba(107,63,160,0.95)',
-            }}
+            className="btn relative mt-7 overflow-hidden px-7 py-3.5 text-[15px]"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, duration: 0.6, ease: EASE }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
           >
-            {/* Light sweeping across the button keeps the CTA alive. */}
             <motion.span
               aria-hidden
               className="pointer-events-none absolute inset-y-0 w-1/3"
               style={{
                 background:
-                  'linear-gradient(105deg, transparent, rgba(255,255,255,0.34), transparent)',
+                  'linear-gradient(105deg, transparent, rgba(255,255,255,0.35), transparent)',
               }}
               animate={{ x: ['-160%', '420%'] }}
               transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 1.4, ease: 'easeInOut' }}

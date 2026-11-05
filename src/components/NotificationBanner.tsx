@@ -7,10 +7,6 @@ import { FOLLOW_UP_REELS } from '../lib/chat'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/**
- * Olivy speaking first. Collapsed it is a single line; opening it grows the
- * same surface into the two reels it is asking about, so nothing is lost.
- */
 export default function NotificationBanner({
   open,
   onDismiss,
@@ -32,7 +28,7 @@ export default function NotificationBanner({
       {open && expanded && (
         <motion.div
           key="scrim"
-          className="fixed inset-0 z-[55] bg-[#2A1B46]/12 backdrop-blur-[2px]"
+          className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-[2px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -43,12 +39,13 @@ export default function NotificationBanner({
       {open && (
         <motion.div
           layout
-          className="surface-raised fixed left-1/2 top-4 z-[60] w-[496px] -translate-x-1/2 overflow-hidden rounded-[22px]"
+          className="surface-raised fixed left-1/2 top-4 z-[60] w-[496px] -translate-x-1/2 overflow-hidden rounded-[16px]"
           initial={{ y: -90, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -90, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.85 }}
         >
+          <div className="absolute inset-y-0 left-0 w-[2px] bg-accent" />
           <motion.div layout="position" className="flex items-start gap-3 px-4 pb-4 pt-4">
             <OlivyOrb size={34} state="notify" particles={false} />
 
@@ -58,8 +55,8 @@ export default function NotificationBanner({
               data-notice="toggle"
               className="min-w-0 flex-1 text-left"
             >
-              <p className="text-[13px] font-bold tracking-[-0.01em] text-ink">Olivy</p>
-              <p className="mt-0.5 text-[13.5px] leading-[1.45] text-ink-soft">
+              <p className="text-[13px] font-semibold tracking-[-0.015em] text-fg">Olivy</p>
+              <p className="mt-0.5 text-[13.5px] leading-[1.45] text-fg-2">
                 Your Monday reel got three times your usual views. I made two more in the same
                 shape.
               </p>
@@ -69,7 +66,7 @@ export default function NotificationBanner({
               type="button"
               onClick={expanded ? () => setExpanded(false) : close}
               aria-label={expanded ? 'Collapse' : 'Dismiss'}
-              className="grid size-7 shrink-0 place-items-center rounded-full bg-white/70 text-ink-faint transition-colors hover:bg-white hover:text-ink"
+              className="grid size-7 shrink-0 place-items-center rounded-full bg-white/[0.04] text-fg-4 transition-colors hover:bg-white/[0.08] hover:text-fg"
             >
               {expanded ? (
                 <ChevronDown className="size-4" strokeWidth={2.4} />
@@ -105,13 +102,7 @@ export default function NotificationBanner({
                     <motion.button
                       type="button"
                       onClick={() => setScheduled(true)}
-                      className="flex-1 rounded-full py-2.5 text-[13.5px] font-semibold text-white"
-                      style={{
-                        background: scheduled
-                          ? 'linear-gradient(135deg, #34C98A, #1FA873)'
-                          : 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-                        boxShadow: '0 10px 24px -12px rgba(107,63,160,0.85)',
-                      }}
+                      className="btn flex-1 py-2.5 text-[13.5px]"
                       whileTap={{ scale: 0.98 }}
                     >
                       <AnimatePresence mode="wait" initial={false}>
@@ -128,11 +119,7 @@ export default function NotificationBanner({
                         </motion.span>
                       </AnimatePresence>
                     </motion.button>
-                    <button
-                      type="button"
-                      onClick={close}
-                      className="rounded-full border border-orchid-200 bg-white/70 px-4 py-2.5 text-[13.5px] font-semibold text-ink-soft transition-colors hover:text-ink"
-                    >
+                    <button type="button" onClick={close} className="btn-ghost px-4 py-2.5 text-[13.5px]">
                       Let me review first
                     </button>
                   </div>

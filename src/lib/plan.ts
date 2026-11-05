@@ -5,11 +5,11 @@ import type { AgentIcon } from './agents'
 export type Tone = 'weak' | 'missing' | 'off' | 'good' | 'later'
 
 export const TONES: Record<Tone, { dot: string; text: string; bg: string }> = {
-  weak: { dot: '#F0A830', text: '#A66A0B', bg: 'rgba(240,168,48,0.14)' },
-  missing: { dot: '#E2574C', text: '#B93A30', bg: 'rgba(226,87,76,0.12)' },
-  off: { dot: '#9B9BAF', text: '#71718A', bg: 'rgba(120,120,145,0.11)' },
-  good: { dot: '#34C98A', text: '#1B8A5F', bg: 'rgba(52,201,138,0.14)' },
-  later: { dot: '#8B7EC8', text: '#6B3FA0', bg: 'rgba(139,126,200,0.14)' },
+  weak: { dot: '#F0A830', text: '#F0A830', bg: 'rgba(240,168,48,0.10)' },
+  missing: { dot: '#EF4444', text: '#EF4444', bg: 'rgba(239,68,68,0.10)' },
+  off: { dot: '#71718A', text: '#9B9BAF', bg: 'rgba(120,120,145,0.08)' },
+  good: { dot: '#00d4aa', text: '#00d4aa', bg: 'rgba(0,212,170,0.10)' },
+  later: { dot: '#818CF8', text: '#818CF8', bg: 'rgba(129,140,248,0.10)' },
 }
 
 export type ChannelState = { detail: string; chip: string; tone: Tone }
@@ -28,7 +28,7 @@ export const CHANNELS: Channel[] = [
     id: 'instagram',
     name: 'Instagram',
     icon: Instagram,
-    accent: '#8B5CF6',
+    accent: '#38BDF8',
     before: {
       detail: '47 posts, 89 views each, one post every 12 days',
       chip: 'Weak',
@@ -44,7 +44,7 @@ export const CHANNELS: Channel[] = [
     id: 'seo',
     name: 'Search',
     icon: Search,
-    accent: '#3B82F6',
+    accent: '#818CF8',
     before: { detail: 'Not ranking for a single keyword', chip: 'None', tone: 'missing' },
     after: {
       detail: 'Twelve keywords targeted, nineteen pages rebuilt',
@@ -56,7 +56,7 @@ export const CHANNELS: Channel[] = [
     id: 'blog',
     name: 'Blog',
     icon: PenLine,
-    accent: '#6B3FA0',
+    accent: '#00D4AA',
     before: { detail: 'No blog on the site', chip: 'None', tone: 'missing' },
     after: {
       detail: 'Two posts a week, written against real searches',
@@ -68,7 +68,7 @@ export const CHANNELS: Channel[] = [
     id: 'geo',
     name: 'AI search',
     icon: Globe,
-    accent: '#06B6D4',
+    accent: '#22D3EE',
     before: { detail: 'Invisible when people ask an assistant', chip: 'Invisible', tone: 'off' },
     after: {
       detail: 'Brand and product data published to eight engines',
@@ -80,7 +80,7 @@ export const CHANNELS: Channel[] = [
     id: 'ads',
     name: 'Ads',
     icon: Megaphone,
-    accent: '#7C8598',
+    accent: '#52525B',
     before: { detail: 'No campaigns running', chip: 'Off', tone: 'off' },
     after: {
       detail: 'Held back until organic shows which creative works',
@@ -99,10 +99,10 @@ export type PlanItem = {
 export type PlanDay = { day: string; date: string; items: PlanItem[] }
 
 export const KIND_STYLE: Record<PlanItem['kind'], { accent: string; icon: AgentIcon }> = {
-  social: { accent: '#8B5CF6', icon: Instagram },
-  blog: { accent: '#6B3FA0', icon: PenLine },
-  seo: { accent: '#3B82F6', icon: Search },
-  review: { accent: '#06B6D4', icon: Globe },
+  social: { accent: '#38BDF8', icon: Instagram },
+  blog: { accent: '#00D4AA', icon: PenLine },
+  seo: { accent: '#818CF8', icon: Search },
+  review: { accent: '#22D3EE', icon: Globe },
 }
 
 export const WEEK: PlanDay[] = [

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Lock } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import OlivyOrb from '../components/OlivyOrb'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -23,7 +23,7 @@ export default function Splash({ onStart }: { onStart: (url: string) => void }) 
       </motion.div>
 
       <motion.h1
-        className="display mt-14 text-[54px] text-ink"
+        className="display mt-14 text-[56px] text-fg"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.28, duration: 0.8, ease: EASE }}
@@ -32,16 +32,16 @@ export default function Splash({ onStart }: { onStart: (url: string) => void }) 
       </motion.h1>
 
       <motion.p
-        className="mt-2.5 text-[16.5px] text-ink-soft"
+        className="mt-3 text-[15.5px] text-fg-3"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.42, duration: 0.8, ease: EASE }}
       >
-        Your marketing partner
+        Marketing intelligence that runs itself
       </motion.p>
 
       <motion.form
-        className="mt-11 w-full max-w-[452px]"
+        className="mt-11 w-full max-w-[480px]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.58, duration: 0.8, ease: EASE }}
@@ -51,32 +51,28 @@ export default function Splash({ onStart }: { onStart: (url: string) => void }) 
         }}
       >
         <motion.div
-          className="surface flex items-center gap-3 rounded-full py-2 pl-5 pr-2"
+          className="surface flex items-center gap-3 rounded-full py-1.5 pl-5 pr-1.5"
           animate={{
             boxShadow: focused
-              ? '0 0 0 3px rgba(139,92,246,0.18), 0 18px 44px -20px rgba(84,48,125,0.4)'
-              : '0 12px 28px -14px rgba(84,48,125,0.22)',
+              ? '0 0 0 1px rgba(0,212,170,0.45), 0 18px 44px -20px rgba(0,212,170,0.35)'
+              : 'inset 0 1px 0 rgba(255,255,255,0.04)',
           }}
           transition={{ duration: 0.25 }}
         >
-          <Lock className="size-[15px] shrink-0 text-ink-faint" strokeWidth={2.2} />
+          <span className="mono shrink-0 text-[12px] text-fg-4">https://</span>
           <input
             autoFocus
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder="Paste your website to get started"
+            placeholder="paste your website"
             aria-label="Your website"
-            className="min-w-0 flex-1 bg-transparent py-2 text-[15px] text-ink outline-none focus-visible:outline-none"
+            className="mono min-w-0 flex-1 bg-transparent py-2.5 text-[14.5px] text-fg outline-none focus-visible:outline-none"
           />
           <motion.button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-[13.5px] font-semibold text-white"
-            style={{
-              background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-              boxShadow: '0 10px 24px -10px rgba(107,63,160,0.85)',
-            }}
+            className="btn shrink-0 px-4 py-2.5 text-[13.5px]"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 400, damping: 24 }}
@@ -89,7 +85,7 @@ export default function Splash({ onStart }: { onStart: (url: string) => void }) 
         <motion.button
           type="button"
           onClick={() => setValue(SITE)}
-          className="mx-auto mt-4 block text-[13px] font-medium text-ink-soft transition-colors hover:text-orchid-600"
+          className="mx-auto mt-4 block text-[13px] text-fg-4 transition-colors hover:text-accent"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1, duration: 0.6 }}

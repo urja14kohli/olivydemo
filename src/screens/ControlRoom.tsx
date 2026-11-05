@@ -149,7 +149,7 @@ export default function ControlRoom() {
               <motion.button
                 type="button"
                 onClick={onOpenChat}
-                className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/60 px-3.5 py-1.5 text-[12.5px] font-semibold text-orchid-600 backdrop-blur-md transition-colors hover:bg-white/85"
+                className="btn-ghost mt-5 px-3.5 py-1.5 text-[12.5px]"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1, duration: 0.5, ease: EASE }}
@@ -220,41 +220,35 @@ function Header({
 }) {
   return (
     <motion.header
-      className="flex items-center justify-between px-6 py-5"
+      className="flex items-center justify-between border-b border-line px-6 py-3.5"
       initial={{ opacity: 0, y: -14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: EASE }}
     >
-      <div className="flex items-center gap-2.5">
-        <OlivyOrb size={26} particles={false} state="idle" />
-        <span className="display text-[17px] text-ink">Olivy</span>
+      <div className="flex items-center gap-3">
+        <OlivyOrb size={22} particles={false} state="idle" />
+        <span className="display text-[15px] text-fg">Olivy</span>
+        <span className="text-fg-4">/</span>
+        <span className="mono text-[12px] text-fg-3">luminaskin.com</span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/55 px-3 py-1.5 text-[12.5px] font-medium text-ink-soft backdrop-blur-md">
-          <Globe className="size-3.5 text-orchid-500" strokeWidth={2.2} />
-          luminaskin.com
+      <div className="flex items-center gap-2.5">
+        <span className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-[12.5px] text-fg-3">
+          <Globe className="size-3.5 text-fg-4" strokeWidth={2.2} />
+          Control room
         </span>
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/55 px-3 py-1.5 text-[12.5px] font-medium text-ink-soft backdrop-blur-md">
+        <span className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-[12.5px] text-fg-3">
           <span className="relative flex size-[6px]">
-            <span className="absolute inset-0 rounded-full bg-live" />
+            <span className="absolute inset-0 rounded-full bg-accent" />
             <motion.span
-              className="absolute inset-0 rounded-full bg-live"
+              className="absolute inset-0 rounded-full bg-accent"
               animate={{ scale: [1, 2.6], opacity: [0.7, 0] }}
               transition={{ duration: 1.9, repeat: Infinity, ease: 'easeOut' }}
             />
           </span>
           {runningCount} agents working
         </span>
-        <button
-          type="button"
-          onClick={onReview}
-          className="rounded-full px-4 py-2 text-[12.5px] font-semibold text-white transition-transform active:scale-[0.98]"
-          style={{
-            background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-            boxShadow: '0 8px 20px -10px rgba(107,63,160,0.8)',
-          }}
-        >
+        <button type="button" onClick={onReview} className="btn px-4 py-1.5 text-[12.5px]">
           Review 3
         </button>
       </div>

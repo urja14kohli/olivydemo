@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import ConnectorCard from '../components/ConnectorCard'
 import type { ConnectState } from '../components/ConnectorCard'
 import OlivyOrb from '../components/OlivyOrb'
-import { GoogleMark, Instagram, SiteMark } from '../components/BrandGlyphs'
+import { GoogleMark, Instagram, ShopifyMark } from '../components/BrandGlyphs'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -13,7 +13,7 @@ const CONNECTORS = [
     id: 'instagram',
     name: 'Instagram',
     purpose: 'So Olivy can publish reels and stories on schedule',
-    mark: <Instagram className="size-[19px] text-[#C13584]" strokeWidth={2} />,
+    mark: <Instagram className="size-[19px] text-fg" strokeWidth={1.8} />,
   },
   {
     id: 'gsc',
@@ -23,9 +23,9 @@ const CONNECTORS = [
   },
   {
     id: 'site',
-    name: 'luminaskin.com',
-    purpose: 'So Olivy can publish blog posts and fix your pages',
-    mark: <SiteMark className="size-[19px] text-orchid-600" strokeWidth={2} />,
+    name: 'Shopify',
+    purpose: 'So Olivy can publish posts and rewrite page titles',
+    mark: <ShopifyMark className="size-[19px]" />,
   },
 ]
 
@@ -41,9 +41,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
 
   const connect = useCallback((id: string) => {
     setStates((s) => (s[id] === 'idle' ? { ...s, [id]: 'connecting' } : s))
-    timers.current.push(
-      setTimeout(() => setStates((s) => ({ ...s, [id]: 'connected' })), 1000),
-    )
+    timers.current.push(setTimeout(() => setStates((s) => ({ ...s, [id]: 'connected' })), 1000))
   }, [])
 
   const connectAll = useCallback(() => {
@@ -66,7 +64,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
       </motion.div>
 
       <motion.h1
-        className="display mt-7 text-center text-[32px] text-ink"
+        className="display mt-7 text-center text-[32px] text-fg"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08, duration: 0.7, ease: EASE }}
@@ -75,7 +73,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
       </motion.h1>
 
       <motion.p
-        className="mt-2.5 max-w-[560px] text-center text-[15px] text-ink-soft"
+        className="mt-2.5 max-w-[560px] text-center text-[15px] text-fg-3"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.16, duration: 0.7, ease: EASE }}
@@ -113,11 +111,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
           <motion.button
             type="button"
             onClick={onDone}
-            className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white"
-            style={{
-              background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-              boxShadow: '0 16px 40px -14px rgba(107,63,160,0.95)',
-            }}
+            className="btn px-7 py-3.5 text-[15px]"
             initial={{ opacity: 0, y: 14, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 22 }}
@@ -131,7 +125,7 @@ export default function Connectors({ onDone }: { onDone: () => void }) {
           <motion.button
             type="button"
             onClick={connectAll}
-            className="rounded-full border border-orchid-300/70 bg-white/60 px-6 py-3 text-[14px] font-semibold text-orchid-600 backdrop-blur-md transition-colors hover:bg-white/85 disabled:opacity-45"
+            className="btn-ghost px-6 py-3 text-[14px] disabled:opacity-45"
             disabled={anyStarted}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -4,21 +4,21 @@ import type { AgentStatus } from '../lib/agents'
 const COPY: Record<AgentStatus, { label: string; dot: string; text: string; bg: string }> = {
   running: {
     label: 'Running',
-    dot: '#34C98A',
-    text: '#1B8A5F',
-    bg: 'rgba(52,201,138,0.13)',
+    dot: '#00D4AA',
+    text: '#7BF0D0',
+    bg: 'rgba(0,212,170,0.10)',
   },
   queued: {
     label: 'Queued',
-    dot: '#F0A830',
-    text: '#A66A0B',
-    bg: 'rgba(240,168,48,0.15)',
+    dot: '#F59E0B',
+    text: '#FBBF24',
+    bg: 'rgba(245,158,11,0.10)',
   },
   inactive: {
     label: 'Standby',
-    dot: '#9B9BAF',
-    text: '#71718A',
-    bg: 'rgba(120,120,145,0.11)',
+    dot: '#52525B',
+    text: '#A1A1AA',
+    bg: 'rgba(255,255,255,0.04)',
   },
 }
 

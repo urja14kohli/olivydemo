@@ -1,69 +1,102 @@
-import { useCallback, useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import AmbientBackground from './components/AmbientBackground'
-import Splash from './screens/Splash'
-import Scanning from './screens/Scanning'
-import Mirror from './screens/Mirror'
-import Plan from './screens/Plan'
-import Connectors from './screens/Connectors'
-import ControlRoom from './screens/ControlRoom'
+import { useEffect, useState } from 'react'
+import Welcome from './screens/Welcome'
+import Scan from './screens/Scan'
+import Channels from './screens/Channels'
+import SignIn from './screens/SignIn'
+import AppShell from './screens/AppShell'
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const ROUTES = ['welcome', 'scan', 'plan', 'signin', 'home', 'calendar'] as const
+type Route = (typeof ROUTES)[number]
 
-const ORDER = ['splash', 'scanning', 'mirror', 'plan', 'connectors', 'control'] as const
-type Screen = (typeof ORDER)[number]
+const LABEL: Record<Route, string> = {
+  welcome: 'Welcome',
+  scan: 'Scan',
+  plan: 'Channels',
+  signin: 'Sign in',
+  home: 'Today',
+  calendar: 'Calendar',
+}
+
+const readRoute = (): Route => {
+  const h = window.location.hash.slice(1) as Route
+  return ROUTES.includes(h) ? h : 'welcome'
+}
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('splash')
+  const [route, setRoute] = useState<Route>(readRoute)
   const [site, setSite] = useState('luminaskin.com')
+  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto')
 
-  const goTo = useCallback((next: Screen) => setScreen(next), [])
+  useEffect(() => {
+    const onHash = () => {
+      setRoute(readRoute())
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
-  // Presenting aid: arrow keys step through the flow, number keys jump.
+  useEffect(() => {
+    if (theme === 'auto') document.documentElement.removeAttribute('data-theme')
+    else document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  // Presenting aid: number keys jump between screens.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-      const i = ORDER.indexOf(screen)
-      if (e.key === 'ArrowRight' && i < ORDER.length - 1) setScreen(ORDER[i + 1])
-      if (e.key === 'ArrowLeft' && i > 0) setScreen(ORDER[i - 1])
+      if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey) return
       const n = Number(e.key)
-      if (n >= 1 && n <= ORDER.length) setScreen(ORDER[n - 1])
+      if (n >= 1 && n <= ROUTES.length) window.location.hash = ROUTES[n - 1]
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [screen])
+  }, [])
+
+  const go = (r: Route) => {
+    window.location.hash = r
+  }
 
   return (
     <>
-      <AmbientBackground />
-      <div className="relative h-full overflow-hidden">
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={screen}
-            className="absolute inset-0 overflow-y-auto"
-            initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -12, filter: 'blur(6px)' }}
-            transition={{ duration: 0.55, ease: EASE }}
+      {route === 'welcome' && (
+        <Welcome
+          onStart={(s) => {
+            setSite(s)
+            go('scan')
+          }}
+        />
+      )}
+      {/* Unmounts when you leave, so the scan replays every time it is opened. */}
+      {route === 'scan' && <Scan site={site} />}
+      {route === 'plan' && <Channels />}
+      {route === 'signin' && <SignIn onDone={() => go('home')} />}
+      {(route === 'home' || route === 'calendar') && <AppShell tab={route} />}
+
+      <nav
+        aria-label="Prototype screens"
+        className="glass fixed bottom-4 left-4 z-40 hidden items-center gap-0.5 rounded-xl p-1 text-[12.5px] shadow-[var(--lift),inset_0_0_0_1px_var(--line)] min-[1100px]:flex"
+      >
+        {ROUTES.map((r) => (
+          <a
+            key={r}
+            href={`#${r}`}
+            aria-current={r === route ? 'true' : undefined}
+            className={`rounded-lg px-[9px] py-[5px] no-underline ${
+              r === route ? 'bg-surface text-ink shadow-[0_1px_2px_rgba(0,0,0,0.06)]' : 'text-ink-3 hover:text-ink'
+            }`}
           >
-            {screen === 'splash' && (
-              <Splash
-                onStart={(url) => {
-                  setSite(url)
-                  goTo('scanning')
-                }}
-              />
-            )}
-            {screen === 'scanning' && (
-              <Scanning site={site} onDone={() => goTo('mirror')} />
-            )}
-            {screen === 'mirror' && <Mirror site={site} onNext={() => goTo('plan')} />}
-            {screen === 'plan' && <Plan onRun={() => goTo('connectors')} />}
-            {screen === 'connectors' && <Connectors onDone={() => goTo('control')} />}
-            {screen === 'control' && <ControlRoom />}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            {LABEL[r]}
+          </a>
+        ))}
+        <span className="mx-1.5 h-4 w-px bg-line-2" aria-hidden />
+        <button
+          type="button"
+          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          className="rounded-lg border-0 bg-transparent px-[9px] py-[5px] text-[12.5px] text-ink-3 hover:text-ink"
+        >
+          {theme === 'dark' ? 'Light' : 'Dark'}
+        </button>
+      </nav>
     </>
   )
 }

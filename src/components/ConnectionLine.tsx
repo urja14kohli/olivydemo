@@ -103,7 +103,7 @@ export default function ConnectionLine({
         cx={to.x}
         cy={to.y}
         r={3}
-        fill="#FFFFFF"
+        fill="#08080A"
         stroke={accent}
         strokeWidth={1.4}
         initial={{ scale: 0, opacity: 0 }}

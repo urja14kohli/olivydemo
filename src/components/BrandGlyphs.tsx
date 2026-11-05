@@ -52,6 +52,18 @@ export function GoogleMark({ className, style }: GlyphProps) {
   )
 }
 
+/** Shopify bag mark, used on the CMS connector. */
+export function ShopifyMark({ className, style }: GlyphProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} style={style} aria-hidden>
+      <path
+        fill="#95BF47"
+        d="M7 8.5V7a5 5 0 0 1 10 0v1.5h1.5l-1.4 12.1A2 2 0 0 1 15.1 23H8.9a2 2 0 0 1-2-1.9L5.5 8.5H7zm1.7 0h6.6V7a3.3 3.3 0 0 0-6.6 0v1.5z"
+      />
+    </svg>
+  )
+}
+
 /** Stand-in mark for the customer's own site or CMS. */
 export function SiteMark({ className, style, strokeWidth = 2 }: GlyphProps) {
   return (

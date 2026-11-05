@@ -22,7 +22,6 @@ type Props = {
   intervalMs?: number
 }
 
-/** The running log along the bottom of the Control Room. */
 export default function ActivityFeed({ startDelay = 3.6, intervalMs = 2400 }: Props) {
   const [started, setStarted] = useState(false)
   const [step, setStep] = useState(-1)
@@ -47,20 +46,20 @@ export default function ActivityFeed({ startDelay = 3.6, intervalMs = 2400 }: Pr
         )
 
   return (
-    <div className="surface flex items-stretch gap-5 rounded-[18px] px-5 py-3">
-      <div className="flex w-[104px] shrink-0 flex-col justify-center gap-1 border-r border-orchid-200/60 pr-5">
-        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-ink">
+    <div className="surface flex items-stretch gap-5 rounded-[14px] px-5 py-3">
+      <div className="flex w-[108px] shrink-0 flex-col justify-center gap-1 border-r border-line pr-5">
+        <span className="flex items-center gap-1.5 text-[11px] font-medium text-fg">
           <span className="relative flex size-[5px]">
-            <span className="absolute inset-0 rounded-full bg-live" />
+            <span className="absolute inset-0 rounded-full bg-accent" />
             <motion.span
-              className="absolute inset-0 rounded-full bg-live"
+              className="absolute inset-0 rounded-full bg-accent"
               animate={{ scale: [1, 2.8], opacity: [0.7, 0] }}
               transition={{ duration: 1.9, repeat: Infinity, ease: 'easeOut' }}
             />
           </span>
           Live activity
         </span>
-        <span className="numeric text-[11px] text-ink-faint">
+        <span className="numeric mono text-[11px] text-fg-4">
           {step < 0 ? 'Standing by' : `${step + 1} events`}
         </span>
       </div>
@@ -72,24 +71,24 @@ export default function ActivityFeed({ startDelay = 3.6, intervalMs = 2400 }: Pr
               key={row.key}
               initial={{ opacity: 0, y: 22 }}
               animate={{
-                opacity: i === rows.length - 1 ? 1 : 0.42 + i * 0.12,
+                opacity: i === rows.length - 1 ? 1 : 0.38 + i * 0.12,
                 y: i * 22,
               }}
               exit={{ opacity: 0, y: -14 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-x-0 top-0 flex items-center gap-3 text-[12px]"
             >
-              <span className="numeric w-[38px] shrink-0 text-ink-faint">{row.time}</span>
+              <span className="numeric mono w-[38px] shrink-0 text-fg-4">{row.time}</span>
               <span
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-md px-1.5 py-[1px] text-[10.5px] font-semibold"
+                className="inline-flex shrink-0 items-center rounded-md px-1.5 py-[1px] text-[10.5px] font-medium"
                 style={{
                   color: AGENT_ACCENTS[row.agent],
-                  background: `${AGENT_ACCENTS[row.agent]}14`,
+                  background: `${AGENT_ACCENTS[row.agent]}18`,
                 }}
               >
                 {row.agent}
               </span>
-              <span className="truncate text-ink-soft">{row.text}</span>
+              <span className="truncate text-fg-2">{row.text}</span>
             </motion.div>
           ))}
         </AnimatePresence>

@@ -4,9 +4,7 @@ export type Reel = {
   caption: string
   slot: string
   duration: string
-  /** Two stops that stand in for the reel thumbnail. */
-  art: [string, string]
-  /** Short line describing the frame, so the card is never just a colour. */
+  image: string
   frame: string
   lift?: string
 }
@@ -18,9 +16,9 @@ export const REELS: Reel[] = [
     caption: 'Three steps, four minutes, before the coffee goes cold.',
     slot: 'Monday, 9:00am',
     duration: '0:22',
-    art: ['#C9A7F0', '#F3D9C6'],
+    image: '/brand/reel-morning.jpg',
     frame: 'Hands warming serum in morning light',
-    lift: '3x your average',
+    lift: '3x average',
   },
   {
     id: 'r2',
@@ -28,17 +26,17 @@ export const REELS: Reel[] = [
     caption: 'Squalane, oat, and nothing you cannot pronounce.',
     slot: 'Wednesday, 6:00pm',
     duration: '0:18',
-    art: ['#A7C4F0', '#D9CEF3'],
+    image: '/brand/reel-pour.jpg',
     frame: 'Close up pour shot on a stone counter',
   },
   {
     id: 'r3',
-    title: 'Customer before and after',
-    caption: 'Six weeks, one bottle, no filter on either photo.',
+    title: 'What left the shelf',
+    caption: 'Six weeks, one bottle, the rest of it gone.',
     slot: 'Friday, 9:00am',
     duration: '0:26',
-    art: ['#EFC9D8', '#CDB6EC'],
-    frame: 'Split frame, week one beside week six',
+    image: '/brand/reel-shelf.jpg',
+    frame: 'The old routine, before it was cleared',
   },
 ]
 
@@ -49,8 +47,8 @@ export const FOLLOW_UP_REELS: Reel[] = [
     caption: 'The two minute version, for the nights you have nothing left.',
     slot: 'Thursday, 8:00pm',
     duration: '0:20',
-    art: ['#B8A6EE', '#EBD3E6'],
-    frame: 'Same lighting, same pace as Monday',
+    image: '/brand/reel-evening.jpg',
+    frame: 'Same product, quieter light',
   },
   {
     id: 'n2',
@@ -58,8 +56,8 @@ export const FOLLOW_UP_REELS: Reel[] = [
     caption: 'Four products out, one in. Here is what changed.',
     slot: 'Saturday, 10:00am',
     duration: '0:24',
-    art: ['#A9D2EC', '#D6C7F2'],
-    frame: 'Counter clear out, same hands, same shelf',
+    image: '/brand/reel-shelf.jpg',
+    frame: 'The shelf, after the clear out',
   },
 ]
 
@@ -72,7 +70,7 @@ export const CONVERSATION: ChatMessage[] = [
     id: 'm1',
     from: 'olivy',
     kind: 'text',
-    text: 'Your week is set up. Three reels, two blog posts, and the search work is already running. Want me to walk you through it?',
+    text: 'Your week is set up. Three reels, two posts, and the search work is already running. Want me to walk you through it?',
   },
   { id: 'm2', from: 'you', kind: 'text', text: 'Show me the reels' },
   {

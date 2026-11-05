@@ -3,11 +3,10 @@ import { KIND_STYLE, WEEK } from '../lib/plan'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/** The week Olivy is proposing, one column per day. */
 export default function CalendarView({ delay = 0 }: { delay?: number }) {
   return (
     <motion.div
-      className="grid w-full grid-cols-7 gap-2.5"
+      className="grid w-full grid-cols-7 gap-2"
       initial="hidden"
       animate="shown"
       variants={{ shown: { transition: { staggerChildren: 0.055, delayChildren: delay } } }}
@@ -19,11 +18,11 @@ export default function CalendarView({ delay = 0 }: { delay?: number }) {
             hidden: { opacity: 0, y: 22 },
             shown: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
           }}
-          className="surface flex min-h-[118px] flex-col gap-2 rounded-[16px] p-2.5"
+          className="surface flex min-h-[118px] flex-col gap-2 rounded-[12px] p-2.5"
         >
           <div className="flex items-baseline justify-between px-0.5">
-            <span className="text-[12px] font-bold tracking-[-0.01em] text-ink">{day.day}</span>
-            <span className="numeric text-[11px] text-ink-faint">{day.date}</span>
+            <span className="text-[12px] font-semibold tracking-[-0.015em] text-fg">{day.day}</span>
+            <span className="numeric mono text-[11px] text-fg-4">{day.date}</span>
           </div>
 
           {day.items.map((item) => {
@@ -32,7 +31,7 @@ export default function CalendarView({ delay = 0 }: { delay?: number }) {
             return (
               <div
                 key={item.label + item.note}
-                className="flex-1 rounded-[11px] px-2 py-2"
+                className="flex-1 rounded-[9px] px-2 py-2"
                 style={{
                   background: `${style.accent}12`,
                   boxShadow: `inset 2px 0 0 ${style.accent}`,
@@ -41,13 +40,13 @@ export default function CalendarView({ delay = 0 }: { delay?: number }) {
                 <div className="flex items-center gap-1.5">
                   <Icon className="size-[11px]" style={{ color: style.accent }} strokeWidth={2.4} />
                   <span
-                    className="text-[11px] font-bold tracking-[-0.01em]"
+                    className="text-[11px] font-semibold tracking-[-0.01em]"
                     style={{ color: style.accent }}
                   >
                     {item.label}
                   </span>
                 </div>
-                <p className="mt-1 text-[11px] leading-[1.35] text-ink-soft">{item.note}</p>
+                <p className="mt-1 text-[11px] leading-[1.35] text-fg-2">{item.note}</p>
               </div>
             )
           })}

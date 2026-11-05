@@ -24,17 +24,9 @@ export default function ChatBubble({
       <div
         className={`max-w-[440px] px-4 py-2.5 text-[14px] leading-[1.55] ${
           mine
-            ? 'rounded-[18px] rounded-br-[6px] border border-white/80 bg-white/85 text-ink'
-            : 'rounded-[18px] rounded-bl-[6px] text-white'
+            ? 'rounded-[16px] rounded-br-[5px] bg-accent text-[#04140f]'
+            : 'rounded-[16px] rounded-bl-[5px] border border-line bg-white/[0.04] text-fg'
         }`}
-        style={
-          mine
-            ? { boxShadow: '0 6px 18px -10px rgba(26,26,46,0.22)' }
-            : {
-                background: 'linear-gradient(135deg, #7C4FD6, #6B3FA0)',
-                boxShadow: '0 10px 26px -14px rgba(107,63,160,0.85)',
-              }
-        }
       >
         {children}
       </div>

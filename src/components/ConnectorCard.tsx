@@ -23,7 +23,7 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
       onClick={state === 'idle' ? onConnect : undefined}
       disabled={state !== 'idle'}
       data-connector={name}
-      className="surface relative flex w-full items-center gap-4 overflow-hidden rounded-[18px] px-4 py-4 text-left"
+      className="surface surface-hover relative flex w-full items-center gap-4 overflow-hidden rounded-[14px] px-4 py-4 text-left"
       whileHover={state === 'idle' ? { y: -2 } : undefined}
       transition={{ type: 'spring', stiffness: 380, damping: 28 }}
     >
@@ -32,7 +32,7 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
           <motion.div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(90deg, rgba(52,201,138,0.12), transparent 62%)' }}
+            style={{ background: 'linear-gradient(90deg, rgba(0,212,170,0.10), transparent 62%)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -40,13 +40,13 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
         )}
       </AnimatePresence>
 
-      <span className="relative grid size-11 shrink-0 place-items-center rounded-[14px] border border-white/80 bg-white/80">
+      <span className="relative grid size-11 shrink-0 place-items-center rounded-[12px] border border-line bg-white/[0.04]">
         {mark}
       </span>
 
       <span className="relative min-w-0 flex-1">
-        <span className="block text-[14.5px] font-bold tracking-[-0.01em] text-ink">{name}</span>
-        <span className="block truncate text-[12.5px] text-ink-soft">{purpose}</span>
+        <span className="block text-[14px] font-semibold tracking-[-0.015em] text-fg">{name}</span>
+        <span className="block truncate text-[12.5px] text-fg-3">{purpose}</span>
       </span>
 
       <span className="relative grid h-9 w-[104px] shrink-0 place-items-center">
@@ -58,7 +58,7 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.25, ease: EASE }}
-              className="rounded-full border border-orchid-300/70 bg-white/80 px-4 py-2 text-[13px] font-semibold text-orchid-600"
+              className="rounded-full border border-line-strong px-4 py-2 text-[13px] font-semibold text-fg"
             >
               Connect
             </motion.span>
@@ -71,10 +71,10 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.25 }}
-              className="flex items-center gap-2 text-[13px] font-medium text-ink-faint"
+              className="flex items-center gap-2 text-[13px] font-medium text-fg-3"
             >
               <motion.span
-                className="size-[14px] rounded-full border-2 border-orchid-300/50 border-t-orchid-600"
+                className="size-[14px] rounded-full border-2 border-white/10 border-t-accent"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
               />
@@ -88,9 +88,9 @@ export default function ConnectorCard({ name, purpose, mark, state, onConnect }:
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: 'spring', stiffness: 460, damping: 20 }}
-              className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1B8A5F]"
+              className="flex items-center gap-1.5 text-[13px] font-semibold text-accent"
             >
-              <span className="grid size-[18px] place-items-center rounded-full bg-live/16">
+              <span className="grid size-[18px] place-items-center rounded-full bg-accent/15">
                 <motion.span
                   initial={{ scale: 0.3 }}
                   animate={{ scale: 1 }}

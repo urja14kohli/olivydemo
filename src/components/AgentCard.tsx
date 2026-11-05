@@ -2,13 +2,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import type { Agent } from '../lib/agents'
 import { useTimeline } from '../lib/hooks'
+import Sparkline, { SPARK } from './Sparkline'
 import StatusPill from './StatusPill'
 
 export const CARD_WIDTH = 282
 export const CARD_HEIGHT = 156
 export const CARD_HEIGHT_COMPACT = 92
 
-/** Agents on standby get a shorter, quieter card. Hierarchy through size. */
 export function cardHeight(agent: Agent) {
   return agent.status === 'inactive' ? CARD_HEIGHT_COMPACT : CARD_HEIGHT
 }
@@ -24,10 +24,6 @@ export default function AgentCard({ agent, live, onOpen }: Props) {
   return <LiveCard agent={agent} live={live} onOpen={onOpen} />
 }
 
-/**
- * A working agent. Shows a rolling window of the last three things it did, so
- * the card height never moves while the feed underneath keeps changing.
- */
 function LiveCard({ agent, live, onOpen }: Props) {
   const durations = agent.steps.map((s) => s.duration)
   const index = useTimeline(durations, live)
@@ -36,30 +32,44 @@ function LiveCard({ agent, live, onOpen }: Props) {
   const windowStart = Math.max(0, Math.min(index, agent.steps.length - 1) - 2)
   const visible = agent.steps.slice(windowStart, windowStart + 3)
   const Icon = agent.icon
+  const spark = SPARK[agent.id]
 
   return (
     <motion.button
       type="button"
       onClick={onOpen}
       data-agent={agent.id}
-      className="surface relative overflow-hidden rounded-[18px] text-left"
+      className="surface surface-hover relative overflow-hidden rounded-[14px] text-left"
       style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
-      whileHover={{ y: -3 }}
+      whileHover={{ y: -2 }}
       transition={{ type: 'spring', stiffness: 380, damping: 28 }}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-20"
-        style={{ background: `linear-gradient(180deg, ${agent.accent}16, transparent)` }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-full w-[3px]"
-        style={{ background: agent.accent, opacity: 0.6 }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: `linear-gradient(90deg, transparent, ${agent.accent}66, transparent)` }}
       />
 
       <div className="relative flex h-full flex-col px-4 py-3.5">
-        <CardHeader agent={agent} Icon={Icon} />
+        <header className="flex items-center gap-2.5">
+          <span
+            className="grid size-8 shrink-0 place-items-center rounded-[9px]"
+            style={{
+              background: `${agent.accent}18`,
+              boxShadow: `inset 0 0 0 1px ${agent.accent}28`,
+            }}
+          >
+            <Icon className="size-[15px]" style={{ color: agent.accent }} strokeWidth={2} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[13.5px] font-semibold tracking-[-0.015em] text-fg">
+              {agent.name}
+            </span>
+            <span className="block truncate text-[11px] text-fg-3">{agent.role}</span>
+          </span>
+          {spark && <Sparkline points={spark} color={agent.accent} className="opacity-80" />}
+          <StatusPill status={agent.status} />
+        </header>
 
         <div className="mt-3 flex-1">
           <div className="flex flex-col gap-[7px]">
@@ -73,7 +83,7 @@ function LiveCard({ agent, live, onOpen }: Props) {
                     key={step.label}
                     layout
                     initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: state === 'pending' ? 0.45 : 1, y: 0 }}
+                    animate={{ opacity: state === 'pending' ? 0.4 : 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
                     className="flex items-center gap-2"
@@ -81,7 +91,7 @@ function LiveCard({ agent, live, onOpen }: Props) {
                     <Marker state={state} accent={agent.accent} />
                     <span
                       className={`min-w-0 flex-1 truncate text-[12px] leading-[15px] ${
-                        state === 'done' ? 'text-ink-soft' : 'font-semibold text-ink'
+                        state === 'done' ? 'text-fg-3' : 'font-medium text-fg'
                       }`}
                     >
                       {step.label}
@@ -90,7 +100,8 @@ function LiveCard({ agent, live, onOpen }: Props) {
                       <motion.span
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="numeric shrink-0 rounded-md bg-orchid-100 px-1.5 py-[1px] text-[10.5px] font-semibold text-orchid-600"
+                        className="numeric shrink-0 rounded-md px-1.5 py-[1px] text-[10.5px] font-medium"
+                        style={{ background: `${agent.accent}18`, color: agent.accent }}
                       >
                         {step.value}
                       </motion.span>
@@ -104,7 +115,7 @@ function LiveCard({ agent, live, onOpen }: Props) {
 
         <footer className="h-[11px]">
           {!finished && agent.steps[index]?.bar ? (
-            <div className="h-[3px] w-full overflow-hidden rounded-full bg-orchid-100">
+            <div className="h-[2px] w-full overflow-hidden rounded-full bg-white/[0.06]">
               <motion.div
                 key={index}
                 className="h-full rounded-full"
@@ -118,7 +129,7 @@ function LiveCard({ agent, live, onOpen }: Props) {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="truncate text-[11px] text-ink-faint"
+              className="truncate text-[11px] text-fg-4"
             >
               Up next: {agent.next}
             </motion.p>
@@ -129,7 +140,6 @@ function LiveCard({ agent, live, onOpen }: Props) {
   )
 }
 
-/** An agent Olivy has deliberately not switched on yet. */
 function StandbyCard({ agent, onOpen }: { agent: Agent; onOpen: () => void }) {
   const Icon = agent.icon
   return (
@@ -137,54 +147,29 @@ function StandbyCard({ agent, onOpen }: { agent: Agent; onOpen: () => void }) {
       type="button"
       onClick={onOpen}
       data-agent={agent.id}
-      className="relative overflow-hidden rounded-[18px] text-left"
+      className="relative overflow-hidden rounded-[14px] text-left"
       style={{
         width: CARD_WIDTH,
         height: CARD_HEIGHT_COMPACT,
-        background: 'rgba(255,255,255,0.34)',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        border: '1px dashed rgba(124,133,152,0.38)',
+        background: 'rgba(255,255,255,0.018)',
+        border: '1px dashed rgba(255,255,255,0.10)',
       }}
-      whileHover={{ y: -3, background: 'rgba(255,255,255,0.55)' }}
+      whileHover={{ y: -2, background: 'rgba(255,255,255,0.035)' }}
       transition={{ type: 'spring', stiffness: 380, damping: 28 }}
     >
       <div className="flex h-full flex-col justify-center gap-2 px-4">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-7 shrink-0 place-items-center rounded-[9px] bg-[#7C8598]/12">
-            <Icon className="size-[14px] text-[#7C8598]" strokeWidth={2} />
+          <span className="grid size-7 shrink-0 place-items-center rounded-[8px] bg-white/[0.04]">
+            <Icon className="size-[14px] text-fg-4" strokeWidth={2} />
           </span>
-          <span className="min-w-0 flex-1 truncate text-[13.5px] font-bold tracking-[-0.01em] text-ink-soft">
+          <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-[-0.015em] text-fg-3">
             {agent.name}
           </span>
           <StatusPill status={agent.status} size="sm" />
         </div>
-        <p className="truncate pl-[38px] text-[11.5px] text-ink-faint">{agent.next}</p>
+        <p className="truncate pl-[38px] text-[11.5px] text-fg-4">{agent.next}</p>
       </div>
     </motion.button>
-  )
-}
-
-function CardHeader({ agent, Icon }: { agent: Agent; Icon: Agent['icon'] }) {
-  return (
-    <header className="flex items-center gap-2.5">
-      <span
-        className="grid size-8 shrink-0 place-items-center rounded-[10px]"
-        style={{
-          background: `${agent.accent}1A`,
-          boxShadow: `inset 0 0 0 1px ${agent.accent}26`,
-        }}
-      >
-        <Icon className="size-[15px]" style={{ color: agent.accent }} strokeWidth={2} />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-[14px] font-bold tracking-[-0.01em] text-ink">
-          {agent.name}
-        </span>
-        <span className="block truncate text-[11px] text-ink-faint">{agent.role}</span>
-      </span>
-      <StatusPill status={agent.status} />
-    </header>
   )
 }
 
@@ -196,9 +181,9 @@ function Marker({ state, accent }: { state: 'done' | 'running' | 'pending'; acce
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 520, damping: 22 }}
         className="grid size-[15px] shrink-0 place-items-center rounded-full"
-        style={{ background: 'rgba(52,201,138,0.16)' }}
+        style={{ background: 'rgba(0,212,170,0.14)' }}
       >
-        <Check className="size-[9px] text-[#1B8A5F]" strokeWidth={3.4} />
+        <Check className="size-[9px] text-accent" strokeWidth={3.4} />
       </motion.span>
     )
   }
@@ -218,7 +203,7 @@ function Marker({ state, accent }: { state: 'done' | 'running' | 'pending'; acce
 
   return (
     <span className="grid size-[15px] shrink-0 place-items-center">
-      <span className="size-[5px] rounded-full bg-ink-faint/45" />
+      <span className="size-[5px] rounded-full bg-fg-4/50" />
     </span>
   )
 }
