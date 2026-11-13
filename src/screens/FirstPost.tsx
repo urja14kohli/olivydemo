@@ -78,8 +78,8 @@ export default function FirstPost({ site, piece, onContinue }: Props) {
           <button type="button" onClick={onContinue} className="btn btn-accent btn-lg w-full">
             Looks good. Continue
           </button>
-          <button type="button" className="btn btn-plain w-full">
-            Try another
+          <button type="button" onClick={() => { window.location.hash = "hub" }} className="btn btn-plain w-full">
+            Skip
           </button>
         </motion.div>
       </main>
