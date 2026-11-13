@@ -79,7 +79,7 @@ export default function FirstPost({ site, piece, onContinue }: Props) {
             Looks good. Continue
           </button>
           <button type="button" className="btn btn-plain w-full">
-            Regenerate
+            Try another
           </button>
         </motion.div>
       </main>
