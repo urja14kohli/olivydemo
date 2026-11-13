@@ -23,8 +23,8 @@ const PARTNERS = [
     logo: (
       <>
         <svg width="26" height="18" viewBox="0 0 26 18" fill="none" aria-hidden>
-          <path d="M1 9c3-5 8-7 12-7s9 2 12 7c-3 5-8 7-12 7S4 14 1 9Z" stroke="#1a1a2e" strokeWidth="2.2" />
-          <circle cx="13" cy="9" r="3.4" fill="#1a1a2e" />
+          <path d="M1 9c3-5 8-7 12-7s9 2 12 7c-3 5-8 7-12 7S4 14 1 9Z" stroke="#76B900" strokeWidth="2.4" />
+          <circle cx="13" cy="9" r="3.4" fill="#76B900" />
         </svg>
         <b className="font-bold tracking-[-0.04em] text-[1.25em] text-[#1a1a2e]">NVIDIA.</b>
       </>
@@ -109,12 +109,12 @@ export default function Welcome({ onStart }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE }}
         >
-          <div className="mb-[clamp(18px,2.6vh,32px)] inline-flex items-center gap-2 rounded-full bg-white py-[5px] pl-[5px] pr-4 text-[14px] text-ink-2 shadow-[inset_0_0_0_1px_var(--line),0_1px_2px_rgba(26,26,46,.04)]">
+          <div className="mb-[clamp(16px,2.4vh,28px)] inline-flex items-center gap-2 rounded-full bg-white py-[4px] pl-[4px] pr-3.5 text-[13px] text-ink-2 shadow-[inset_0_0_0_1px_var(--line),0_1px_2px_rgba(26,26,46,.04)]">
             <span className="rounded-full bg-accent-tint px-3 py-[5px] font-medium text-accent">Early access</span>
             <span className="inline-flex items-center gap-2">Your AI marketing partner <Arrow /></span>
           </div>
 
-          <h1 className="landing-headline text-[clamp(38px,min(5.5vw,9.2vh),104px)] font-bold leading-[1.02] tracking-[-0.055em] text-ink">
+          <h1 className="landing-headline text-[clamp(34px,min(4.3vw,7.2vh),76px)] font-bold leading-[1.02] tracking-[-0.055em] text-ink">
             You built something great.
             <br />
             Now let&apos;s get it{' '}
@@ -126,12 +126,12 @@ export default function Welcome({ onStart }: Props) {
             </span>
           </h1>
 
-          <p className="mt-[clamp(18px,3vh,36px)] max-w-[34em] text-[clamp(15px,min(1.6vw,2.6vh),22px)] leading-[1.6] text-ink-3">
+          <p className="mt-[clamp(18px,3vh,36px)] max-w-[34em] text-[clamp(14px,min(1.2vw,2vh),18px)] leading-[1.6] text-ink-3">
             Olivy is the marketing partner that learns your brand, figures out what actually works for your business, and handles it. Social, SEO, blogs, ads, launches.{' '}
             <span className="text-ink">It doesn&apos;t wait for you to figure it out.</span>
           </p>
 
-          <form onSubmit={submit} className="landing-cta mt-[clamp(20px,3.6vh,44px)] flex w-[min(630px,100%)] items-center rounded-2xl bg-white p-[9px] shadow-[inset_0_0_0_1px_var(--line),0_6px_24px_rgba(26,26,46,.05)]">
+          <form onSubmit={submit} className="landing-cta mt-[clamp(20px,3.6vh,44px)] flex w-[min(520px,100%)] items-center rounded-2xl bg-white p-[7px] shadow-[inset_0_0_0_1px_var(--line),0_6px_24px_rgba(26,26,46,.05)]">
             <label className="sr-only" htmlFor="site">Website</label>
             <input
               id="site"
@@ -142,9 +142,9 @@ export default function Welcome({ onStart }: Props) {
               value={site}
               onChange={(e) => setSite(e.target.value)}
               placeholder="yourwebsite.com"
-              className="h-[40px] min-w-0 flex-1 border-0 bg-transparent px-3 text-[16px] text-ink outline-none placeholder:text-ink-3/70"
+              className="h-[38px] min-w-0 flex-1 border-0 bg-transparent px-3 text-[15px] text-ink outline-none placeholder:text-ink-3/70"
             />
-            <button type="submit" className="inline-flex h-[50px] shrink-0 items-center gap-2 rounded-xl bg-accent px-6 text-[16px] font-medium text-white transition hover:brightness-110">
+            <button type="submit" className="inline-flex h-[44px] shrink-0 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-medium text-white transition hover:brightness-110">
               Get started <Arrow />
             </button>
           </form>
@@ -152,10 +152,10 @@ export default function Welcome({ onStart }: Props) {
           <div className="mt-[clamp(14px,2vh,22px)] flex items-center justify-center gap-3">
             <div className="flex -space-x-2">
               {AVATARS.map((a) => (
-                <img key={a} src={`/brand/${a}.jpg`} alt="" width={40} height={40} className="size-10 rounded-full object-cover ring-2 ring-white" />
+                <img key={a} src={`/brand/${a}.jpg`} alt="" width={32} height={32} className="size-8 rounded-full object-cover ring-2 ring-white" />
               ))}
             </div>
-            <p className="text-[15px] text-ink-3"><b className="font-semibold text-ink">500+ founders</b> already on the waitlist</p>
+            <p className="text-[14px] text-ink-3"><b className="font-semibold text-ink">500+ founders</b> already on the waitlist</p>
           </div>
         </motion.div>
       </main>
