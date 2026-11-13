@@ -1,24 +1,33 @@
 export const BRAND = {
-  name: 'Lumina',
-  domain: 'luminaskin.com',
-  category: 'Clean skincare',
-  founded: '2024',
-  hero: '/brand/hero.jpg',
-  bottle: '/brand/bottle.jpg',
-  blog: '/brand/blog.jpg',
+  name: 'Perféro',
+  domain: 'perferofragrance.com',
+  instagram: 'perfero.co',
+  category: 'Fine fragrance',
+  tagline: 'Find your signature',
+  product: 'Discovery Set',
+  hero: '/brand/pf-box-gold.jpg',
+  bottle: '/brand/pf-discovery-open.jpg',
+  blog: '/brand/pf-flatlay-roses.jpg',
   palette: [
-    { name: 'Stone', hex: '#E7E1D6' },
-    { name: 'Oat', hex: '#C9B8A0' },
-    { name: 'Serum', hex: '#D4A574' },
+    { name: 'Noir', hex: '#1A1A1A' },
+    { name: 'Gold', hex: '#C6A75E' },
+    { name: 'Cream', hex: '#F4EFE6' },
     { name: 'Ink', hex: '#2A241C' },
   ],
-  audience: {
-    who: 'Women 28–42, urban, already buying clean beauty',
-    size: '2.3K',
-    reach: 'Instagram only',
-  },
   voice: {
-    tone: 'Quiet, specific, never salesy',
-    example: 'Three ingredients. One bottle. That is the routine.',
+    tone: 'Quiet, refined, never salesy',
+    example: 'Seven scents. One journey. Find the one that stays with you.',
   },
+  audience: 'Women and men 25 to 45 who buy fragrance as a ritual, not a trend',
+  look: 'Black, gold, cream. Soft candlelight and clean studio light.',
+}
+
+/** Real Perféro product photography */
+export const IMG = {
+  vials: '/brand/posts/p04.jpg',
+  goldBox: '/brand/posts/p11.jpg',
+  openSet: '/brand/posts/p02.jpg',
+  roses: '/brand/posts/p01.jpg',
+  tea: '/brand/posts/p06.jpg',
+  logo: '/brand/logo.png',
 }

@@ -103,6 +103,87 @@ export const SCAN_GROUPS: { title: string; rows: ScanRow[] }[] = [
 
 export const SCAN_POSTS = [IMG.pour, IMG.shelf, IMG.hero]
 
+/* ---------- Match (Bumble-style first taste) ---------- */
+
+export type MatchOption = {
+  id: string
+  image: string
+  title: string
+  caption: string
+  duration?: string
+}
+
+export type MatchRound = {
+  id: string
+  /** Same format on both sides of the round. */
+  kind: 'reel' | 'still' | 'caption'
+  prompt: string
+  typeLabel: string
+  a: MatchOption
+  b: MatchOption
+}
+
+export const MATCH_ROUNDS: MatchRound[] = [
+  {
+    id: 'routine',
+    kind: 'reel',
+    prompt: 'Which reel feels more like Lumina?',
+    typeLabel: 'Instagram Reels',
+    a: {
+      id: 'morning',
+      image: IMG.morning,
+      title: 'Morning glow routine',
+      caption: 'Three steps. Two minutes. Cold pressed face oil, barrier cream, done.',
+      duration: '0:24',
+    },
+    b: {
+      id: 'evening',
+      image: IMG.evening,
+      title: 'Evening wind-down',
+      caption: 'Wash. Oil. Sleep. The whole routine fits between brushing your teeth and the light.',
+      duration: '0:28',
+    },
+  },
+  {
+    id: 'product',
+    kind: 'still',
+    prompt: 'Which product moment feels right?',
+    typeLabel: 'Product posts',
+    a: {
+      id: 'pour',
+      image: IMG.pour,
+      title: 'The pour',
+      caption: 'Cold pressed. One bottle. That is the face oil.',
+      duration: '0:18',
+    },
+    b: {
+      id: 'shelf',
+      image: IMG.shelf,
+      title: 'On the shelf',
+      caption: 'Six products. No clutter. Everything earns its place.',
+      duration: '0:16',
+    },
+  },
+  {
+    id: 'voice',
+    kind: 'caption',
+    prompt: 'Which voice sounds like you?',
+    typeLabel: 'Same frame, two captions',
+    a: {
+      id: 'quiet',
+      image: IMG.bottle,
+      title: 'Quiet specific',
+      caption: BRAND.voice.example,
+    },
+    b: {
+      id: 'warm',
+      image: IMG.bottle,
+      title: 'Slightly warmer',
+      caption: 'Your skin already knows what it needs. We just stopped getting in the way.',
+    },
+  },
+]
+
 /* ---------- Channels ---------- */
 
 export type ChannelPlan = {
@@ -204,6 +285,29 @@ export const READY: ReadyPiece[] = [
     scheduled: 'Goes live Tuesday',
   },
 ]
+
+/** Build the first ready reel from the three match picks (routine, product, voice). */
+export function composeFirstPost(picks: MatchOption[]): ReadyPiece {
+  const routine = picks[0] ?? MATCH_ROUNDS[0].a
+  const voice = picks[2] ?? picks[0] ?? routine
+  return {
+    id: 'p1',
+    kind: 'reel',
+    image: routine.image,
+    caption: voice.caption,
+    duration: routine.duration ?? '0:24',
+    label: 'Reel for Instagram and TikTok',
+    title: routine.title,
+    why: 'Built from the looks you picked for Lumina, same product, your voice.',
+    secondary: 'Edit',
+    when: 'Monday, 9:00 AM',
+    scheduled: 'Scheduled for Monday, 9:00 AM',
+  }
+}
+
+export function readyWithFirst(first: ReadyPiece): ReadyPiece[] {
+  return [first, READY[1]]
+}
 
 export type Decision = {
   id: string

@@ -1,31 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Welcome from './screens/Welcome'
-import Scan from './screens/Scan'
-import Channels from './screens/Channels'
-import SignIn from './screens/SignIn'
-import AppShell from './screens/AppShell'
+import Url from './screens/Url'
+import Generating from './screens/Generating'
+import Match from './screens/Match'
+import FirstPost from './screens/FirstPost'
+import Connect from './screens/Connect'
+import Hub from './screens/Hub'
+import Calendar from './screens/Calendar'
+import Notifications from './screens/Notifications'
+import Settings from './screens/Settings'
+import OlivyChat from './components/OlivyChat'
+import { composeFirstPost } from './lib/demo'
+import type { MatchOption } from './lib/demo'
+import { BRAND } from './lib/brand'
 
-const ROUTES = ['welcome', 'scan', 'plan', 'signin', 'home', 'calendar'] as const
+const ROUTES = ['welcome', 'url', 'generating', 'match', 'first', 'connect', 'hub', 'calendar', 'notifs', 'settings'] as const
 type Route = (typeof ROUTES)[number]
 
-const LABEL: Record<Route, string> = {
-  welcome: 'Welcome',
-  scan: 'Scan',
-  plan: 'Channels',
-  signin: 'Sign in',
-  home: 'Today',
-  calendar: 'Calendar',
+const ALIAS: Record<string, Route> = {
+  home: 'hub',
+  scan: 'generating',
+  plan: 'match',
+  signin: 'connect',
+  today: 'hub',
 }
 
 const readRoute = (): Route => {
-  const h = window.location.hash.slice(1) as Route
-  return ROUTES.includes(h) ? h : 'welcome'
+  const raw = window.location.hash.slice(1)
+  if (ALIAS[raw]) return ALIAS[raw]
+  return ROUTES.includes(raw as Route) ? (raw as Route) : 'welcome'
 }
 
 export default function App() {
   const [route, setRoute] = useState<Route>(readRoute)
-  const [site, setSite] = useState('luminaskin.com')
-  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto')
+  const [site, setSite] = useState(BRAND.domain)
+  const [picks, setPicks] = useState<MatchOption[]>([])
+
+  const first = useMemo(() => composeFirstPost(picks), [picks])
+  const inApp = route === 'hub' || route === 'calendar' || route === 'notifs' || route === 'settings'
 
   useEffect(() => {
     const onHash = () => {
@@ -37,14 +50,13 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (theme === 'auto') document.documentElement.removeAttribute('data-theme')
-    else document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    document.documentElement.setAttribute('data-theme', 'light')
+  }, [])
 
-  // Presenting aid: number keys jump between screens.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey) return
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      if (e.metaKey || e.ctrlKey) return
       const n = Number(e.key)
       if (n >= 1 && n <= ROUTES.length) window.location.hash = ROUTES[n - 1]
     }
@@ -58,45 +70,52 @@ export default function App() {
 
   return (
     <>
-      {route === 'welcome' && (
-        <Welcome
-          onStart={(s) => {
-            setSite(s)
-            go('scan')
-          }}
-        />
-      )}
-      {/* Unmounts when you leave, so the scan replays every time it is opened. */}
-      {route === 'scan' && <Scan site={site} />}
-      {route === 'plan' && <Channels />}
-      {route === 'signin' && <SignIn onDone={() => go('home')} />}
-      {(route === 'home' || route === 'calendar') && <AppShell tab={route} />}
-
-      <nav
-        aria-label="Prototype screens"
-        className="glass fixed bottom-4 left-4 z-40 hidden items-center gap-0.5 rounded-xl p-1 text-[12.5px] shadow-[var(--lift),inset_0_0_0_1px_var(--line)] min-[1100px]:flex"
-      >
-        {ROUTES.map((r) => (
-          <a
-            key={r}
-            href={`#${r}`}
-            aria-current={r === route ? 'true' : undefined}
-            className={`rounded-lg px-[9px] py-[5px] no-underline ${
-              r === route ? 'bg-surface text-ink shadow-[0_1px_2px_rgba(0,0,0,0.06)]' : 'text-ink-3 hover:text-ink'
-            }`}
-          >
-            {LABEL[r]}
-          </a>
-        ))}
-        <span className="mx-1.5 h-4 w-px bg-line-2" aria-hidden />
-        <button
-          type="button"
-          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-          className="rounded-lg border-0 bg-transparent px-[9px] py-[5px] text-[12.5px] text-ink-3 hover:text-ink"
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={route}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.28 }}
         >
-          {theme === 'dark' ? 'Light' : 'Dark'}
-        </button>
-      </nav>
+          {route === 'welcome' && (
+            <Welcome
+              onStart={(s) => {
+                setSite(s)
+                setPicks([])
+                go('generating')
+              }}
+            />
+          )}
+          {route === 'url' && (
+            <Url
+              onContinue={(s) => {
+                setSite(s)
+                setPicks([])
+                go('generating')
+              }}
+            />
+          )}
+          {route === 'generating' && <Generating site={site} onDone={() => go('match')} />}
+          {route === 'match' && (
+            <Match
+              site={site}
+              onDone={(next) => {
+                setPicks(next)
+                go('first')
+              }}
+            />
+          )}
+          {route === 'first' && <FirstPost site={site} piece={first} onContinue={() => go('connect')} />}
+          {route === 'connect' && <Connect site={site} onDone={() => go('hub')} />}
+          {route === 'hub' && <Hub />}
+          {route === 'calendar' && <Calendar />}
+          {route === 'notifs' && <Notifications />}
+          {route === 'settings' && <Settings />}
+        </motion.div>
+      </AnimatePresence>
+
+      {inApp && <OlivyChat />}
     </>
   )
 }

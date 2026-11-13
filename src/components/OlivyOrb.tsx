@@ -1,42 +1,23 @@
-import type { CSSProperties } from 'react'
-
 export type OrbState = 'idle' | 'thinking'
 
 type Props = {
   size?: number
   state?: OrbState
-  /** Slow breathing. Use on large hero orbs. */
   breathe?: boolean
-  /** Soft lilac bloom behind the orb. */
   halo?: boolean
   className?: string
 }
 
-/**
- * Olivy's face. A soft pearly sphere of four blurred pastel blobs (blue, lilac,
- * peach, mint) morphing inside a circular mask. Pure CSS, so it costs nothing
- * per frame and honours prefers-reduced-motion.
- */
-export default function OlivyOrb({
-  size = 40,
-  state = 'idle',
-  breathe = false,
-  halo = false,
-  className = '',
-}: Props) {
-  const orb = (
+/** Olivy's mark: purple rounded square with a white ring. */
+export default function OlivyOrb({ size = 40, state = 'idle', breathe = false, className = '' }: Props) {
+  const pulse = breathe || state === 'thinking'
+  return (
     <span
       aria-hidden
-      className={`orb ${breathe ? 'orb-breathe' : ''} ${state === 'thinking' ? 'orb-thinking' : ''} ${className}`}
-      style={{ '--s': `${size}px` } as CSSProperties}
+      className={`inline-grid shrink-0 place-items-center bg-accent ${pulse ? 'animate-pulse' : ''} ${className}`}
+      style={{ width: size, height: size, borderRadius: size * 0.3 }}
     >
-      <span className="orb-core">
-        <i />
-        <i />
-        <i />
-        <i />
-      </span>
+      <span className="rounded-full border-white" style={{ width: size * 0.48, height: size * 0.48, borderWidth: Math.max(2, size * 0.1) }} />
     </span>
   )
-  return halo ? <span className="orb-halo">{orb}</span> : orb
 }

@@ -29,20 +29,16 @@ export default function CalendarPage({ days, approved, approveAll, move }: Props
   const allDone = approved.has('p1') && approved.has('p2')
 
   return (
-    <main className="mx-auto max-w-[1280px] px-5 pb-40 pt-9 sm:px-8 sm:pt-12">
-      <div className="mb-7 flex flex-wrap items-end justify-between gap-6">
+    <main className="mx-auto max-w-[1280px] px-5 pb-28 pt-7 sm:px-8 sm:pt-9">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="mb-2.5 text-sm text-ink-3">November 5 to 11</p>
-          <h1 className="display mb-3.5 text-[clamp(32px,4.4vw,44px)] tracking-[-0.032em]">This week</h1>
-          <p className="voice m-0 max-w-[34em] text-[19px] text-ink-2">
-            14 pieces across your 3 channels, timed for when your audience is actually online. Two
-            need your yes.
-          </p>
+          <h1 className="display mb-1 text-[clamp(24px,3.2vw,30px)] tracking-[-0.03em]">This week</h1>
+          <p className="m-0 text-[14px] text-ink-3">Nov 5–11 · drag to reschedule</p>
         </div>
         <button
           type="button"
           onClick={approveAll}
-          className={`btn btn-lg ${allDone ? 'btn-done' : 'btn-ink'}`}
+          className={`btn ${allDone ? 'btn-done' : 'btn-ink'}`}
         >
           {allDone ? (
             <>
@@ -55,7 +51,7 @@ export default function CalendarPage({ days, approved, approveAll, move }: Props
         </button>
       </div>
 
-      <div className="mb-5 flex flex-wrap items-center gap-2.5" role="group" aria-label="Filter by channel">
+      <div className="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filter by channel">
         {CHIPS.map((c) => (
           <button
             key={c.id}
@@ -70,12 +66,10 @@ export default function CalendarPage({ days, approved, approveAll, move }: Props
             {c.label}
           </button>
         ))}
-        <span className="flex-1" />
-        <span className="text-[13.5px] text-ink-3">Drag anything to move it</span>
       </div>
 
       <div className="no-scrollbar overflow-x-auto rounded-[22px] bg-surface shadow-lift">
-        <div className="grid min-w-[1120px] grid-cols-7">
+        <div className="grid min-w-[980px] grid-cols-7">
           {days.map((day, di) => (
             <div
               key={day.n}
@@ -90,13 +84,13 @@ export default function CalendarPage({ days, approved, approveAll, move }: Props
                 setDragging(null)
                 setOver(null)
               }}
-              className={`flex min-h-[520px] flex-col gap-3 px-3 pb-[18px] pt-3.5 transition-colors ${
+              className={`flex min-h-[420px] flex-col gap-2.5 px-2.5 pb-4 pt-3 transition-colors ${
                 di > 0 ? 'shadow-[inset_1px_0_0_var(--line)]' : ''
               } ${day.now ? 'bg-accent-tint/60' : ''} ${over === di && dragging ? 'bg-fill' : ''}`}
             >
               <div className="flex items-baseline justify-between px-0.5">
-                <b className="font-semibold">{day.d}</b>
-                <span className={`display text-[22px] tracking-[-0.03em] ${day.now ? 'text-accent-text' : 'text-ink-3'}`}>
+                <b className="text-[13px] font-semibold">{day.d}</b>
+                <span className={`text-[15px] font-semibold tabular-nums ${day.now ? 'text-accent-text' : 'text-ink-3'}`}>
                   {day.n}
                 </span>
               </div>

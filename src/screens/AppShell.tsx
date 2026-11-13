@@ -3,8 +3,8 @@ import type { FormEvent } from 'react'
 import { ArrowUp, ChevronDown } from 'lucide-react'
 import OlivyOrb from '../components/OlivyOrb'
 import { IconTile } from '../components/Icons'
-import { WEEK, WORKING } from '../lib/lumina'
-import type { Day } from '../lib/lumina'
+import { readyWithFirst, WEEK, WORKING } from '../lib/lumina'
+import type { Day, ReadyPiece } from '../lib/lumina'
 import Today from './Today'
 import CalendarPage from './CalendarPage'
 
@@ -15,9 +15,16 @@ const TABS = [
   { id: 'brand', label: 'Brand', href: '#home' },
 ] as const
 
-export default function AppShell({ tab }: { tab: 'home' | 'calendar' }) {
+export default function AppShell({
+  tab,
+  firstPiece,
+}: {
+  tab: 'home' | 'calendar'
+  firstPiece?: ReadyPiece
+}) {
   const [days, setDays] = useState<Day[]>(WEEK)
   const [approved, setApprovedSet] = useState<Set<string>>(new Set())
+  const ready = firstPiece ? readyWithFirst(firstPiece) : undefined
 
   const setApproved = (id: string, on: boolean) =>
     setApprovedSet((prev) => {
@@ -44,7 +51,7 @@ export default function AppShell({ tab }: { tab: 'home' | 'calendar' }) {
     <div className="min-h-screen">
       <TopBar tab={tab} />
       {tab === 'home' ? (
-        <Today days={days} approved={approved} setApproved={setApproved} />
+        <Today days={days} approved={approved} setApproved={setApproved} ready={ready} />
       ) : (
         <CalendarPage
           days={days}
@@ -176,31 +183,49 @@ function Task({
   )
 }
 
+/** Experimental: chat stays out of the page. Orb expands into a short ask field. */
 function AskBar() {
-  const submit = (e: FormEvent) => e.preventDefault()
+  const [open, setOpen] = useState(false)
+  const submit = (e: FormEvent) => {
+    e.preventDefault()
+    setOpen(false)
+  }
+
   return (
-    <div className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-1/2 z-[15] w-[min(640px,calc(100%-32px))] -translate-x-1/2">
-      <form
-        onSubmit={submit}
-        className="glass flex items-center gap-2.5 rounded-[20px] py-2 pl-3 pr-2 shadow-[var(--lift-hi),inset_0_0_0_1px_var(--line)]"
-      >
-        <OlivyOrb size={28} />
-        <label htmlFor="ask" className="sr-only">
-          Ask Olivy
-        </label>
-        <input
-          id="ask"
-          placeholder="Ask Olivy, or tell her what to change"
-          className="h-10 min-w-0 flex-1 border-0 bg-transparent text-[15.5px] outline-none placeholder:text-ink-3"
-        />
-        <button
-          type="submit"
-          aria-label="Send"
-          className="grid size-10 place-items-center rounded-xl border-0 bg-ink text-[var(--bg)]"
+    <div className="fixed bottom-[calc(20px+env(safe-area-inset-bottom,0px))] right-5 z-[15] sm:right-8">
+      {open ? (
+        <form
+          onSubmit={submit}
+          className="glass flex w-[min(360px,calc(100vw-40px))] items-center gap-2 rounded-[18px] py-1.5 pl-2.5 pr-1.5 shadow-[var(--lift-hi),inset_0_0_0_1px_var(--line)]"
         >
-          <ArrowUp className="size-4" strokeWidth={2.2} />
+          <OlivyOrb size={26} />
+          <label htmlFor="ask" className="sr-only">
+            Ask Olivy
+          </label>
+          <input
+            id="ask"
+            autoFocus
+            placeholder="Ask Olivy…"
+            className="h-9 min-w-0 flex-1 border-0 bg-transparent text-[14.5px] outline-none placeholder:text-ink-3"
+          />
+          <button
+            type="submit"
+            aria-label="Send"
+            className="grid size-9 place-items-center rounded-xl border-0 bg-ink text-[var(--bg)]"
+          >
+            <ArrowUp className="size-3.5" strokeWidth={2.2} />
+          </button>
+        </form>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Ask Olivy"
+          className="grid size-12 place-items-center rounded-full border-0 bg-surface shadow-lift-hi"
+        >
+          <OlivyOrb size={28} breathe />
         </button>
-      </form>
+      )}
     </div>
   )
 }
